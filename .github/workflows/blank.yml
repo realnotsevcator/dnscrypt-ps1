@@ -19,6 +19,7 @@ on:
       - ".ci/**"
       - ".git*"
       - ".github/workflows/releases.yml"
+  workflow_dispatch:  # Добавлено для ручного запуска
 
 jobs:
   build:
