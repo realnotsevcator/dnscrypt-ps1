@@ -10,9 +10,12 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code
+      - name: Checkout
         uses: actions/checkout@v4
-
+        with:
+          repository: DNSCrypt/dnscrypt-proxy
+          path: dnscrypt-proxy
+          
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
@@ -44,6 +47,14 @@ jobs:
         run: |
           rm -rf dnscrypt-proxy/.github
 
+  
+  upload:
+    name: Upload to main branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
       - name: Commit and push changes
         run: |
           git config --global user.name 'actions'
