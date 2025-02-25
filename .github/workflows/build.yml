@@ -50,11 +50,17 @@ jobs:
           current_date=$(date '+%Y-%m-%d %H:%M:%S')
           git commit -m "⚡ Updated at ${current_date}" || echo "No changes to commit"
 
-      - name: Fetch latest changes
-        run: git fetch origin
+      - name: Fetch all branches
+        run: git fetch --all
 
-      - name: Merge changes
-        run: git merge origin/main
+      - name: List branches
+        run: git branch -a
+
+      - name: Check out default branch
+        run: git checkout main || git checkout master
+
+      - name: Pull latest changes
+        run: git pull origin $(git rev-parse --abbrev-ref HEAD)
 
       - name: Push changes
         uses: ad-m/github-push-action@master
