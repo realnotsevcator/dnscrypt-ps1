@@ -42,6 +42,10 @@ jobs:
         run: |
           .ci/ci_build.sh "dev"
 
+      - name: List files after build
+        run: |
+          ls -l dnscrypt-proxy/
+
       - name: Remove .github folder
         run: |
           rm -rf dnscrypt-proxy/.github
@@ -52,7 +56,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        
+
+      - name: List files before commit
+        run: |
+          ls -l dnscrypt-proxy/
+
       - name: Commit and push changes
         run: |
           git config --global user.name 'actions'
@@ -60,4 +68,4 @@ jobs:
           git add -f dnscrypt-proxy/dnscrypt-proxy.exe dnscrypt-proxy/localhost.pem
           current_date=$(date '+%Y-%m-%d %H:%M:%S')
           git commit -m "⚡ Updated at ${current_date}" || echo "No changes to commit"
-          git push https://${{ secrets.PAT }}@github.com/${{ github.repository }}.git
+          git push
