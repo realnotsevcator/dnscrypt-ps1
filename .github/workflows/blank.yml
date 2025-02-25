@@ -58,10 +58,13 @@ jobs:
         run: |
           .ci/ci_build.sh "dev"
 
+      - name: List files after build
+        run: ls -l dnscrypt-proxy/
+
       - name: Commit and push changes
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add dnscrypt-proxy.exe localhost.pem
+          git add dnscrypt-proxy/dnscrypt-proxy.exe dnscrypt-proxy/localhost.pem
           git commit -m "Automated build $(date)"
           git push origin main
