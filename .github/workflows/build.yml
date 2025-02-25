@@ -12,8 +12,6 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-        with:
-          repository: DNSCrypt/dnscrypt-proxy
 
       - name: Set up Go
         uses: actions/setup-go@v5
@@ -53,4 +51,4 @@ jobs:
           git add -f dnscrypt-proxy/dnscrypt-proxy.exe dnscrypt-proxy/localhost.pem
           current_date=$(date '+%Y-%m-%d %H:%M:%S')
           git commit -m "⚡ Updated at ${current_date}" || echo "No changes to commit"
-          git push
+          git push https://${{ secrets.PAT }}@github.com/${{ github.repository }}.git
