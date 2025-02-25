@@ -2,24 +2,8 @@ name: Scheduled Build
 
 on:
   schedule:
-    - cron: '0 */3 * * *'  # Каждые 3 часа
-  push:
-    paths:
-      - "**.go"
-      - "go.*"
-      - "**/testdata/**"
-      - ".ci/**"
-      - ".git*"
-      - ".github/workflows/releases.yml"
-  pull_request:
-    paths:
-      - "**.go"
-      - "go.*"
-      - "**/testdata/**"
-      - ".ci/**"
-      - ".git*"
-      - ".github/workflows/releases.yml"
-  workflow_dispatch:  # Добавлено для ручного запуска
+    - cron: '0 */3 * * *'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -58,13 +42,11 @@ jobs:
         run: |
           .ci/ci_build.sh "dev"
 
-      - name: List files after build
-        run: ls -l dnscrypt-proxy/
-
       - name: Commit and push changes
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add dnscrypt-proxy/dnscrypt-proxy.exe dnscrypt-proxy/localhost.pem
-          git commit -m "Automated build $(date)"
+          current_date=$(date '+%Y-%m-%d %H:%M:%S')
+          git commit -m "⚡ Updated at ${current_date}" || echo "No changes to commit"
           git push origin main
