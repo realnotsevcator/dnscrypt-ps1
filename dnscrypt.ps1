@@ -59,7 +59,8 @@ $baseFiles = @(
     "dnscrypt-proxy.toml",
     "localhost.pem",
     "dnscrypt-redirect.cmd",
-    "dnscrypt.cmd"
+    "dnscrypt.cmd",
+    "uninstall.ps1"
 )
 $baseUrl = "https://github.com/sevcator/dnscrypt-ps1/raw/refs/heads/main/files/"
 function Download-Files($files, $baseUrl, $destination) {
