@@ -68,6 +68,7 @@ cls
 echo.
 set /p confirm="- [Y/N] Are you want to uninstall? "
 if /i not "%confirm%"=="Y" goto menu
+powershell -NoProfile -ExecutionPolicy Bypass -File "%dnsCryptDir%\uninstall.ps1"
 dnsCryptDir%\dnscrypt-proxy.exe" -service stop >nul 2>&1
 dnsCryptDir%\dnscrypt-proxy.exe" -service uninstall >nul 2>&1
 timeout /t 3 /nobreak >nul 2>&1
