@@ -15,8 +15,8 @@ jobs:
         
       - name: Update Files
         run: |
-          apt-get install unzip
-          apt-get install wget
+          sudo apt-get install unzip
+          sudo apt-get install wget
           latest_version=$(curl -s https://api.github.com/repos/DNSCrypt/dnscrypt-proxy/releases/latest | jq -r '.tag_name')
           download_url="https://github.com/DNSCrypt/dnscrypt-proxy/releases/download/${latest_version}/dnscrypt-proxy-win64-${latest_version}.zip"
           wget $download_url -O dnscrypt-proxy.zip
