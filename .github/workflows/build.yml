@@ -15,6 +15,10 @@ jobs:
         with:
           repository: DNSCrypt/dnscrypt-proxy
 
+      - name: List root directory after checkout
+        run: |
+          ls -l
+
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
@@ -44,11 +48,11 @@ jobs:
 
       - name: List files after build
         run: |
-          ls -l dnscrypt-proxy/
+          ls -l
 
       - name: Remove .github folder
         run: |
-          rm -rf dnscrypt-proxy/.github
+          rm -rf .github
 
   upload:
     name: Upload to main branch
@@ -59,13 +63,13 @@ jobs:
 
       - name: List files before commit
         run: |
-          ls -l dnscrypt-proxy/
+          ls -l
 
       - name: Commit and push changes
         run: |
           git config --global user.name 'actions'
           git config --global user.email 'actions@github.com'
-          git add -f dnscrypt-proxy/dnscrypt-proxy.exe dnscrypt-proxy/localhost.pem
+          git add -f dnscrypt-proxy.exe localhost.pem
           current_date=$(date '+%Y-%m-%d %H:%M:%S')
           git commit -m "⚡ Updated at ${current_date}" || echo "No changes to commit"
           git push
