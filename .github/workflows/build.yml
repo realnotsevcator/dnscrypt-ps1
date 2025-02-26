@@ -30,10 +30,6 @@ jobs:
           echo 'cd dnscrypt-proxy || exit 1' >> ci_build.sh
           echo 'go clean' >> ci_build.sh
           echo 'env GOOS=windows GOARCH=amd64 go build -mod vendor -ldflags="-s -w"' >> ci_build.sh
-          echo 'mkdir win64' >> ci_build.sh
-          echo 'mv dnscrypt-proxy.exe win64/' >> ci_build.sh
-          echo 'mv localhost.pem win64/' >> ci_build.sh
-          echo 'mv win64/dnscrypt-proxy.exe win64/localhost.pem .' >> ci_build.sh
           chmod +x ci_build.sh
           bash ci_build.sh
           rm -rf .github
@@ -50,7 +46,7 @@ jobs:
         run: |
           git config --global user.name 'actions'
           git config --global user.email 'actions@github.com'
-          git add -f dnscrypt-proxy/win64/dnscrypt-proxy.exe dnscrypt-proxy/win64/localhost.pem
+          git add -f dnscrypt-proxy/dnscrypt-proxy.exe
           current_date=$(date '+%Y-%m-%d %H:%M:%S')
           git commit -m "⚡ Updated at ${current_date}" || echo "No changes to commit"
           git push
