@@ -14,7 +14,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: DNSCrypt/dnscrypt-proxy
-
+          path: zapret
+          
       - name: List root directory after checkout
         run: |
           ls -l
