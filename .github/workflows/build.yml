@@ -25,9 +25,9 @@ jobs:
 
       - name: Build
         run: |
+          cd dnscrypt-proxy
           echo '#!/bin/sh' > ci_build.sh
           echo 'PACKAGE_VERSION="$1"' >> ci_build.sh
-          echo 'cd dnscrypt-proxy || exit 1' >> ci_build.sh
           echo 'go clean' >> ci_build.sh
           echo 'env GOOS=windows GOARCH=amd64 go build -mod vendor -ldflags="-s -w"' >> ci_build.sh
           chmod +x ci_build.sh
