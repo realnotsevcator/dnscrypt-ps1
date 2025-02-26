@@ -1,32 +1,32 @@
-name: Scheduled Build
+name: Update Files
 
 on:
   schedule:
-    - cron: '0 */3 * * *'
+    - cron: '0 */2 * * *'
   workflow_dispatch:
 
 jobs:
-  build:
-    name: Build
+  update:
+    name: Update Files
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-          
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: 1
-          check-latest: true
-        id: go
-
-      - name: Build
+        
+      - name: Update Files
         run: |
-          git clone https://github.com/DNSCrypt/dnscrypt-proxy
-          chmod +x .github/build.sh
-          bash .github/build.sh
+          apt-get install unzip
+          apt-get install wget
+          latest_version=$(curl -s https://api.github.com/repos/DNSCrypt/dnscrypt-proxy/releases/latest | jq -r '.tag_name')
+          download_url="https://github.com/DNSCrypt/dnscrypt-proxy/releases/download/${latest_version}/dnscrypt-proxy-win64-${latest_version}.zip"
+          wget $download_url -O dnscrypt-proxy.zip
+          unzip dnscrypt-proxy.zip
+          mkdir -p files
+          mv win64/dnscrypt-proxy.exe files/dnscrypt-proxy.exe
+          mv win64/localhost.pem files/localhost.pem
+          rm dnscrypt-proxy.zip
 
-      - name: Commit and push changes
+      - name: Commit and Push changes
         run: |
           git config --global user.name 'actions'
           git config --global user.email 'actions@github.com'
