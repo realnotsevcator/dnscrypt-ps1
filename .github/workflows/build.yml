@@ -16,10 +16,6 @@ jobs:
           repository: DNSCrypt/dnscrypt-proxy
           path: dnscrypt-proxy
           
-      - name: List root directory after checkout
-        run: |
-          ls -l
-
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
@@ -27,8 +23,9 @@ jobs:
           check-latest: true
         id: go
 
-      - name: Create ci_build.sh
+      - name: Create build file
         run: |
+          cd dnscrypt-proxy
           mkdir -p .ci
           echo '#!/bin/sh' > .ci/ci_build.sh
           echo 'PACKAGE_VERSION="$1"' >> .ci/ci_build.sh
@@ -39,17 +36,11 @@ jobs:
           echo 'mv dnscrypt-proxy.exe win64/' >> .ci/ci_build.sh
           echo 'cp localhost.pem win64/' >> .ci/ci_build.sh
           echo 'mv win64/dnscrypt-proxy.exe win64/localhost.pem .' >> .ci/ci_build.sh
-
-      - name: Make ci_build.sh executable
-        run: chmod +x .ci/ci_build.sh
+          chmod +x .ci/ci_build.sh
 
       - name: Build
         run: |
           .ci/ci_build.sh "dev"
-
-      - name: List files after build
-        run: |
-          ls -l
 
       - name: Remove .github folder
         run: |
@@ -61,10 +52,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: List files before commit
-        run: |
-          ls -l
 
       - name: Commit and push changes
         run: |
