@@ -15,24 +15,13 @@ function Check-Admin {
     return $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
 }
 if (-not (Check-Admin)) {
-    Write-Host "! Run PowerShell as administrator rights!"
+    Write-Host "! Run PowerShell with administrator rights!"
     return
 }
 $initialDirectory = Get-Location
 $osVersion = [Environment]::OSVersion.Version
 Write-Host "- Windows version: $osVersion"
 $windows10Version = New-Object System.Version(10, 0)
-if ($osVersion.Major -lt 10) {
-    Write-Host "* Enabling Test Mode for Windows less than 10" -ForegroundColor Yellow
-    $testMode = bcdedit /enum | Select-String "testsigning" -Quiet
-    
-    if (-not $testMode) {
-        bcdedit /set loadoptions DISABLE_INTEGRITY_CHECKS | Out-Null
-        bcdedit /set TESTSIGNING ON | Out-Null
-        Write-Host "* Reboot the system and run this script to countinue the installation" -ForegroundColor Yellow
-        exit 1
-    }
-}
 function Check-ProcessorArchitecture {
     $processor = Get-WmiObject -Class Win32_Processor
     return $processor.AddressWidth -eq 64
@@ -63,14 +52,16 @@ Write-Host "- Destroying services"
             }
         }
     } catch {
-
     }
 }
 Write-Host "- Flushing DNS cache"
 ipconfig /flushdns -ErrorAction SilentlyContinue | Out-Null
 Write-Host "- Downloading files"
 $baseFiles = @(
-    "dnscrypt-proxy.exe", "dnscrypt-proxy.toml", "localhost.pem", "dnscrypt.cmd", "dnscrypt-redirect.cmd"
+    "dnscrypt-proxy.exe", 
+    "dnscrypt-proxy.toml", 
+    "localhost.pem", 
+    "dnscrypt-redirect.cmd"
 )
 $baseUrl = "https://github.com/sevcator/dnscrypt-ps1/raw/refs/heads/main/files/"
 function Download-Files($files, $baseUrl, $destination) {
@@ -79,25 +70,39 @@ function Download-Files($files, $baseUrl, $destination) {
             $url = "$baseUrl/$file"
             $outFile = Join-Path $destination $file
             Invoke-WebRequest -Uri $url -OutFile $outFile -ErrorAction Stop
+            Write-Host "Downloaded $file"
         } catch {
-            Write-Host "* Error to download $file : $($_.Exception.Message)" -ForegroundColor Red
+            Write-Host "* Error downloading $file: $($_.Exception.Message)" -ForegroundColor Red
         }
     }
 }
-Download-Files $tacticsFiles $tacticsUrl $dnsCryptDir
-Copy-Item "$dnsCryptDir\dnscrypt-redirect.cmd" "$system32Dir\zapret.cmd" -Force
-foreach ($file in $files) {
-    try {
-        Invoke-WebRequest -Uri $file.Url -OutFile "$dnsCryptDir\$($file.Name)" -ErrorAction Stop | Out-Null
-    } catch {
-        Write-Host ("{0}: {1}" -f $($file.Name), $_.Exception.Message) -ForegroundColor Red
-    }
+if (!(Test-Path $dnsCryptDir)) {
+    New-Item -ItemType Directory -Force -Path $dnsCryptDir | Out-Null
 }
+Download-Files $baseFiles $baseUrl $dnsCryptDir
+Copy-Item "$dnsCryptDir\dnscrypt-redirect.cmd" "$system32Dir\zapret.cmd" -Force
 Write-Host "- Creating service"
 try {
-    "$dnsCryptDir\dnscrypt-proxy.exe" -service install | Out-Null
-    "$dnsCryptDir\dnscrypt-proxy.exe" -service start | Out-Null
+    & "$dnsCryptDir\dnscrypt-proxy.exe" -service install
+    & "$dnsCryptDir\dnscrypt-proxy.exe" -service start
 } catch {
     Write-Host ("! Failed to create or start service: {0}" -f $_.Exception.Message) -ForegroundColor Red
 }
+Write-Host "- Checking network adapters and setting DNS if Cloudflare is reachable"
+function Check-NetworkAdapters {
+    $adapters = Get-NetAdapter | Where-Object { $_.Status -eq "Up" }
+
+    foreach ($adapter in $adapters) {
+        Write-Host "  Checking adapter:" $adapter.Name
+        $ping = Test-Connection -ComputerName "cloudflare.com" -Count 1 -Source $adapter.Name -ErrorAction SilentlyContinue
+        
+        if ($ping) {
+            Write-Host "    Cloudflare is reachable. Setting DNS to 127.0.0.1 and 1.0.0.1."
+            Set-DnsClientServerAddress -InterfaceAlias $adapter.Name -ServerAddresses 127.0.0.1,1.0.0.1
+        } else {
+            Write-Host "    Cloudflare is NOT reachable on this adapter."
+        }
+    }
+}
+Check-NetworkAdapters
 Write-Host "- Done!"
