@@ -70,7 +70,7 @@ Write-Host "- Flushing DNS cache"
 ipconfig /flushdns -ErrorAction SilentlyContinue | Out-Null
 Write-Host "- Downloading files"
 $baseFiles = @(
-    "dnscrypt-proxy.exe", "dnscrypt-proxy.toml", "localhost.pem", "dnscrypt-redirect.cmd"
+    "dnscrypt-proxy.exe", "dnscrypt-proxy.toml", "localhost.pem", "dnscrypt.cmd", "dnscrypt-redirect.cmd"
 )
 $baseUrl = "https://github.com/sevcator/dnscrypt-ps1/raw/refs/heads/main/files/"
 function Download-Files($files, $baseUrl, $destination) {
@@ -95,8 +95,8 @@ foreach ($file in $files) {
 }
 Write-Host "- Creating service"
 try {
-    "$dnsCryptDir\dnscrypt-proxy.exe" -service install
-    "$dnsCryptDir\dnscrypt-proxy.exe" -service start
+    "$dnsCryptDir\dnscrypt-proxy.exe" -service install | Out-Null
+    "$dnsCryptDir\dnscrypt-proxy.exe" -service start | Out-Null
 } catch {
     Write-Host ("! Failed to create or start service: {0}" -f $_.Exception.Message) -ForegroundColor Red
 }
