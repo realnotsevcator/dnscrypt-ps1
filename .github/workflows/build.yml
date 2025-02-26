@@ -39,7 +39,7 @@ jobs:
           chmod +x .ci/ci_build.sh
           .ci/ci_build.sh
           rm -rf .github
-          ls
+          ls -l
 
   upload:
     name: Upload to main branch
