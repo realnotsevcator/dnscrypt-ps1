@@ -37,13 +37,7 @@ jobs:
           echo 'cp localhost.pem win64/' >> .ci/ci_build.sh
           echo 'mv win64/dnscrypt-proxy.exe win64/localhost.pem .' >> .ci/ci_build.sh
           chmod +x .ci/ci_build.sh
-
-      - name: Build
-        run: |
-          .ci/ci_build.sh "dev"
-
-      - name: Remove .github folder
-        run: |
+          .ci/ci_build.sh
           rm -rf .github
 
   upload:
