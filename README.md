@@ -4,8 +4,8 @@
 <p align="center">
   <img src="https://github.com/sevcator/dnscrypt-ps1/blob/main/.github/readme-icon.png?raw=true" 
        alt="DNSCrypt" 
-       width="80" 
-       height="64">
+       width="160" 
+       height="128">
 </p>
 <h1 align="center">dnscrypt-ps1</h1>
 
