@@ -5,7 +5,7 @@
   <img src="https://raw.githubusercontent.com/gist/Xainey/d5bde7d01dcbac51ac951810e94313aa/raw/6c858c46726541b48ddaaebab29c41c07a196394/PowerShell.svg" 
        alt="Windows PowerShell" 
        width="128" 
-       height="64">
+       height="128">
 </p>
 <h1 align="center">zapret-ps1</h1>
 
