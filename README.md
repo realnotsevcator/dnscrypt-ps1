@@ -28,3 +28,6 @@ irm https://sevcator.github.io/dnscrypt.ps1 | iex
    
 # Contributing
 Feel free to contribute to this project by submitting issues or pull requests.
+
+# Problems
+Report in the [Issues](https://github.com/sevcator/dnscrypt-ps1/issues) or directly in social networks
