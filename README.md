@@ -5,7 +5,7 @@
   <img src="https://github.com/sevcator/dnscrypt-ps1/blob/main/.github/readme-icon.png?raw=true" 
        alt="DNSCrypt" 
        width="128" 
-       height="128">
+       height="64">
 </p>
 <h1 align="center">dnscrypt-ps1</h1>
 
