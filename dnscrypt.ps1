@@ -74,9 +74,7 @@ function Download-Files($files, $baseUrl, $destination) {
         }
     }
 }
-if (!(Test-Path $dnsCryptDir)) {
-    New-Item -ItemType Directory -Force -Path $dnsCryptDir | Out-Null
-}
+New-Item -ItemType Directory -Force -Path $dnsCryptDir | Out-Null
 Download-Files $baseFiles $baseUrl $dnsCryptDir
 try {
     Copy-Item "$dnsCryptDir\dnscrypt-redirect.cmd" "$system32Dir\dnscrypt.cmd" -Force
