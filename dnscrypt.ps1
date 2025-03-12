@@ -10,6 +10,9 @@ Write-Host "  D   D  N  NN      S C     R R      Y    P       T"
 Write-Host "  DDDD   N   N  SSSS   CCC  R  R     Y    P       T"
 Write-Host "       sevcator.github.io - github.com/bol-van"
 Write-Host ""
+Write-Host "- This script is no longer supported" -ForegroundColor Yellow
+Write-Host "- Install DNSCrypt-Proxy manually" -ForegroundColor Yellow
+Write-Host ""
 function Check-Admin {
     $identity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
     $principal = New-Object System.Security.Principal.WindowsPrincipal($identity)
