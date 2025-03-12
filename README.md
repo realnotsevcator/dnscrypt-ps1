@@ -1,6 +1,9 @@
 > [!CAUTION]
 > I am not responsible for any of your actions! This script is created for testing purposes.
 
+> [!WARNING]
+> This script is no longer supported.
+
 <p align="center">
   <img src="https://github.com/sevcator/dnscrypt-ps1/blob/main/.github/readme-icon.png?raw=true" 
        alt="DNSCrypt" 
